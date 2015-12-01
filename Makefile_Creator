@@ -27,9 +27,12 @@ s_dir='srcs/'
 o_dir='objs/'
 i_dir='-I includes/'
 main='main.c'
+mainodir='$(O_DIR)main.o'
 home=`cd; pwd`
 lib='ft'
+n="\n"
 #libs="$home/Documents/Programs/C/Lib"
+main_rule="\n"'$(O_DIR)main.o:	main.c'"\n\t"'@echo "'$yellow'$<'$grey'"\n\t@echo "↪︎-   '$green'$@'$white'"'"\n\t"'@$(CC) $(FLAGS) -c $< -o $@'"\n"
 files=`ls srcs/*.c 2> /dev/null | cut -d'/' -f2 | tr '\n' ' '`
 if [[ $files == "" ]]; then
 	files=`ls *.c | tr '\n' ' '`
@@ -37,13 +40,15 @@ if [[ $files == "" ]]; then
 	o_dir=''
 	i_dir=''
 	main=''
+	maino=''
+	mainodir=''
 fi
 
 if [[ ! -d objs ]]; then
 	mkdir objs
 fi
 
-rules='$(CC) $(FLAGS) $(LIBS) $^ '$main' -o $@'
+rules='$(CC) $(FLAGS) $(LIBS) $^ -o $@'
 
 if [[ "$1" != '' ]]; then
 	name=$1
@@ -71,15 +76,15 @@ RM		= rm -f
 
 all: 		$(NAME)
 
-$(NAME): 	$(OBJS)
-	@echo "./'$pink'$(NAME) created'$white'."
+$(NAME): 	$(OBJS) '$mainodir'
 	@'"$rules"'
+	@echo "./'$blue'$(NAME)'$white' created."
 	@echo "'$white'Done."
 
-$(O_DIR)%.o:		$(S_DIR)%.c '${main}'
-	@echo "'$yellow'$<'$grey'\t->  '$green'$@'$white'"
+$(O_DIR)%.o:		$(S_DIR)%.c
+	@echo "'$yellow'$<'$grey'"\n\t@echo "↪︎-   '$green'$@'$white'"
 	@$(CC) $(FLAGS) -c $< -o $@
-
+'$main_rule'
 clean:
 	@$(RM) $(OBJS)
 
