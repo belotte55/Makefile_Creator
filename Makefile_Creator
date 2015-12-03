@@ -51,7 +51,7 @@ rules='$(CC) $(FLAGS) $(LIBS) $^ -o $@'
 
 if [[ "$1" != '' ]]; then
 	name=$1
-	rules='ar rc $(NAME) $(OBJS); ranlib -o $@'
+	rules='ar rc $(NAME) $(OBJS); ranlib $@'
 else
 	name='run'
 fi
