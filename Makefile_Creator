@@ -29,9 +29,8 @@ i_dir='-I includes/'
 main='main.c'
 mainodir='$(O_DIR)main.o'
 home=`cd; pwd`
-lib='ft'
-n="\n"
-#libs="$home/Documents/Programs/C/Lib"
+lib=`ls *.a | cut -d'.' -f1 | cut -d'b' -f2`
+lib=`echo $lib`
 main_rule="\n"'$(O_DIR)main.o:	main.c'"\n\t"'@echo "'$yellow'$<'$grey'"\n\t@echo "↪︎-   '$green'$@'$white'"'"\n\t"'@$(CC) $(FLAGS) -c $< -o $@'"\n"
 files=`ls srcs/*.c 2> /dev/null | cut -d'/' -f2 | tr '\n' ' '`
 if [[ $files == "" ]]; then
@@ -40,7 +39,7 @@ if [[ $files == "" ]]; then
 	o_dir=''
 	i_dir=''
 	main=''
-	maino=''
+	main_rule=''
 	mainodir=''
 fi
 
@@ -82,7 +81,7 @@ $(NAME): 	$(OBJS) '$mainodir'
 	@echo "'$white'Done."
 
 $(O_DIR)%.o:		$(S_DIR)%.c
-	@echo "'$yellow'$<'$grey'"\n\t@echo "↪︎-   '$green'$@'$white'"
+	@echo "'$yellow'$<'$grey'"\n\t@echo "↪︎- '$green'$@'$white'"
 	@$(CC) $(FLAGS) -c $< -o $@
 '$main_rule'
 clean:
