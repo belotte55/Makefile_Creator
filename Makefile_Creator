@@ -29,7 +29,7 @@ i_dir='-I includes/'
 main='main.c'
 mainodir='$(O_DIR)main.o'
 home=`cd; pwd`
-lib=`ls *.a | cut -d'.' -f1 | cut -d'b' -f2`
+lib=`ls *.a 2> /dev/null | cut -d'.' -f1 | cut -d'b' -f2`
 lib=`echo $lib`
 main_rule="\n"'$(O_DIR)main.o:	main.c'"\n\t"'@echo "'$yellow'$<'$grey'"\n\t@echo "↪︎-   '$green'$@'$white'"'"\n\t"'@$(CC) $(FLAGS) -c $< -o $@'"\n"
 files=`ls srcs/*.c 2> /dev/null | cut -d'/' -f2 | tr '\n' ' '`
@@ -41,11 +41,12 @@ if [[ $files == "" ]]; then
 	main=''
 	main_rule=''
 	mainodir=''
+else
+	if [[ ! -d objs ]]; then
+		mkdir objs
+	fi
 fi
 
-if [[ ! -d objs ]]; then
-	mkdir objs
-fi
 
 rules='$(CC) $(FLAGS) $(LIBS) $^ -o $@'
 
