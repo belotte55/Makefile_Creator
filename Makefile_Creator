@@ -1,14 +1,14 @@
-#****************************************************************************#
-#*																		*#
-#*														:::		 ::::::::	*#
-#*	Create_Makefile									  :+:	   :+:	  :+:	*#
-#*													+:+ +:+			+:+		*#
-#*	by: Belotte <belotte1355@gmail.com>			  +#+  +:+		 +#+		*#
-#*												+#+#+#+#+#+	  +#+			*#
-#*	Created: 2015/06/20 15:02:47 by Belotte			 #+#	#+#				*#
-#*	Updated: 2015/06/20 15:02:47 by Belotte			 ###  ########.fr		*#
-#*																			*#
-#****************************************************************************#
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile_Creator                                   :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: Belotte <fbellott@student.42.fr>           +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2015/12/11 11:35:21 by Belotte           #+#    #+#              #
+#    Updated: 2015/12/11 11:36:05 by Belotte          ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
 
 #!/bin/bash
 
@@ -29,7 +29,7 @@ i_dir='-I includes/'
 main='main.c'
 mainodir='$(O_DIR)main.o'
 home=`cd; pwd`
-lib=`ls *.a | cut -d'.' -f1 | cut -d'b' -f2`
+lib=`ls *.a 2> /dev/null | cut -d'.' -f1 | cut -d'b' -f2`
 lib=`echo $lib`
 main_rule="\n"'$(O_DIR)main.o:	main.c'"\n\t"'@echo "'$yellow'$<'$grey'"\n\t@echo "↪︎-   '$green'$@'$white'"'"\n\t"'@$(CC) $(FLAGS) -c $< -o $@'"\n"
 files=`ls srcs/*.c 2> /dev/null | cut -d'/' -f2 | tr '\n' ' '`
@@ -41,17 +41,20 @@ if [[ $files == "" ]]; then
 	main=''
 	main_rule=''
 	mainodir=''
+else
+	if [[ ! -d objs ]]; then
+		mkdir objs
+	fi
 fi
 
-if [[ ! -d objs ]]; then
-	mkdir objs
-fi
 
 rules='$(CC) $(FLAGS) $(LIBS) $^ -o $@'
 
 if [[ "$1" != '' ]]; then
 	name=$1
 	rules='ar rc $(NAME) $(OBJS); ranlib $@'
+	main_rule=''
+	mainodir=''
 else
 	name='run'
 fi
